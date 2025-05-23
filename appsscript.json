@@ -1,7 +1,25 @@
 {
-  "timeZone": "America/New_York",
-  "dependencies": {
+  "timeZone": "Europe/Paris",
+  "dependencies": {},
+  "oauthScopes": [
+    "https://www.googleapis.com/auth/calendar",
+    "https://www.googleapis.com/auth/script.container.ui",
+    "https://www.googleapis.com/auth/script.locale",
+    "https://www.googleapis.com/auth/script.external_request",
+    "https://www.googleapis.com/auth/userinfo.email",
+    "https://www.googleapis.com/auth/script.scriptapp"
+  ],
+  "addOns": {
+    "common": {
+      "name": "Water Events",
+      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Waves_icon.svg/1024px-Waves_icon.svg.png",
+      "useLocaleFromApp": true,
+      "homepageTrigger": {
+        "runFunction": "buildAddOn"
+      }
+    },
+    "calendar": {}
   },
-  "exceptionLogging": "STACKDRIVER",
   "runtimeVersion": "V8"
 }
+

@@ -42,6 +42,8 @@ function saveSampleSessions() {
             swell: {
                 min: 0.8,
                 max: 2.0,
+                periodMin: 5,
+                periodMax: 15,
                 directionStart: 270, // from the west
                 directionEnd: 360    // to the north
             }
@@ -60,6 +62,8 @@ function saveSampleSessions() {
             swell: {
                 min: 0.5,
                 max: 1.5,
+                periodMin: 5,
+                periodMax: 15,
                 directionStart: 0,   // from the north
                 directionEnd: 90     // to the east
             }
