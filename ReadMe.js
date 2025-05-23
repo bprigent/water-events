@@ -1,4 +1,6 @@
-# 🌊 Water Events – Google Calendar Automation Tool
+/**
+ 
+# Water Events – Google Calendar Automation Tool
 Water Events is a Google Apps Script project designed to automatically create Google Calendar events based on water-related conditions — such as tide times, surf forecasts, or weather data.
 
 ## User needs
@@ -11,3 +13,6 @@ Help people know when are where to do water activities seamlessly.
 ## Features
 - Users can indicate which watersport they practice: surf, windsurf, kitesurf, and wing. They can pick more than one sport.
 - Users can indicate which location they practice said their watersports.
+- Users can indicate which day of the week they are available to practice and what time of the day they are available to practice.
+
+**/
