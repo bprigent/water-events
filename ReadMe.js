@@ -47,5 +47,45 @@ Help people know when are where to do their favorite water activities seamlessly
 - Tides API: ??
 - Wind API: ??
 - Swell API: ??
+- CLASP – for local development with Cursor and GitHub
+- Git + GitHub – for version control and collaboration
+
+## Technical implementation
+This project is built entirely with Google Apps Script, leveraging the power of Google Calendar and script-based automation. 
+The app is designed to be lightweight, serverless, and integrated directly into the user's existing Google Workspace environment.
+
+### Architecture Overview
+1. User Settings Manager
+- Allows users to input their name, and availability (days and time).
+- Users also input their personal API keys for external data providers (tide, wind, swell).
+- All data is stored per user using `PropertiesService.getUserProperties()` to ensure persistence and privacy.
+
+2. Session Engine
+- Users can define multiple sessions, each consisting of a sport + location + condition pairing.
+- Each session includes thresholds for tide, wind, and swell conditions.
+- On a scheduled basis (e.g. daily at 6 AM), the script fetches current forecast data for that day, the data comes in increments of 1 hour. This uses the API keys provided by the user.
+- Then, the script checks if the data from the day matches any sessions meet the user-defined criteria.
+
+3. Calendar Scheduler
+- When a weather condition for the hour matches the session criteria, a 1-hour event is created in the user's Google Calendar.
+- The event title is formatted with the session's location and sport.
+- The description includes condition details and a link to the best forecast source.
+
+### Storage Strategy
+User Properties (`PropertiesService.getUserProperties`)
+- Used to store all user preferences persistently across sessions.
+- Each user’s data is scoped to their account and isolated from other users.
+- Ideal for storing JSON objects like profile settings, sessions, and API keys.
+
+### Data Flow
+1. User sets up their profile via a custom UI built with Google Apps Script's HTML service.
+2. The data is saved in `UserProperties`.
+3. A time-based trigger runs a daily script:
+- Loads stored user preferences.
+- Fetches live data from external APIs.
+- Evaluates each session's conditions.
+- Creates calendar events for matching sessions.
+
+
 
 */
