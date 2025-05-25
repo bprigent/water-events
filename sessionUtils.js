@@ -2,7 +2,7 @@
  * this function is used to geocode a location query to get the latitude and longitude.
  */
 function geocodeLocation(query) {
-    const apiKey = "278c413020714d8295c6ecea475230e6"; 
+    const apiKey = "278c413020714d8295c6ecea475230e6";  // link to find is www.opencagedata.com/dashboard#geocoding
     const url = `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(query)}&key=${apiKey}&limit=1`;
   
     const response = UrlFetchApp.fetch(url);

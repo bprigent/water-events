@@ -50,9 +50,8 @@ function buildSessionDetailCard(e) {
   }
 
 
-  /**
+/**
  * Deletes a session by index and returns to the list.
- * @param {Object} e - Event object (expects index param)
  */
 function handleDeleteSession(e) {
     const index = parseInt(e.parameters.index, 10);
