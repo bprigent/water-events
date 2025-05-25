@@ -1,78 +1,74 @@
-/**
- * Checks whether a value is within a min/max range
- */
-function isInRange(value, min, max) {
-  return value >= min && value <= max;
-}
-  
-/**
- * Checks whether a directional value (degrees) is within a circular range.
- * Handles cases where the range wraps around 360°.
- */
-function isInDirectionalRange(angle, start, end) {
-  if (start <= end) {
-    return angle >= start && angle <= end;
-  } else {
-    return angle >= start || angle <= end; // handles 350°–10° case
-  }
-}
 
-
-/**
- * checks if the hour is in the user's availability.
- */
-function isHourInUserAvailability(forecastTime, profile) {
-  const date = new Date(forecastTime);
-  const day = date.toLocaleDateString("en-US", { weekday: "long" });
-
-  const hour = date.getHours();
-  const startHour = parseInt(profile.timeWindow.start.split(":")[0], 10);
-  const endHour = parseInt(profile.timeWindow.end.split(":")[0], 10);
-
-  return profile.availableDays.includes(day) && hour >= startHour && hour < endHour;
-}
-
-
-/**
- * Matches a session against the current marine weather conditions
- */
-function matchSessionToConditions(session, conditions) {
+// Matches a single session against a single forecast hour.
+function matchSessionToConditions(session, conditionsForAnHour) {
+  // extract the session conditions
   const { tide, wind, swell } = session;
 
-  return (
-    isInRange(conditions.tideLevel, tide.min, tide.max) &&
-    conditions.tideDirection === tide.direction &&
+  // Check tide conditions
+  const tideMatches =
+    isInRange(conditionsForAnHour.tideLevel, tide.min, tide.max) &&
+    conditionsForAnHour.tideDirection === tide.direction;
+  if (!tideMatches) return false;
 
-    isInRange(conditions.windSpeed, wind.min, wind.max) &&
-    isInDirectionalRange(conditions.windDirection, wind.directionStart, wind.directionEnd) &&
+  // Check wind conditions
+  const windMatches =
+    isInRange(conditionsForAnHour.windSpeed, wind.min, wind.max) &&
+    isInDirectionalRange(conditionsForAnHour.windDirection, wind.directionStart, wind.directionEnd);
+  if (!windMatches) return false;
 
-    isInRange(conditions.swellHeight, swell.min, swell.max) &&
-    isInRange(conditions.swellPeriod, swell.periodMin, swell.periodMax) &&
-    isInDirectionalRange(conditions.swellDirection, swell.directionStart, swell.directionEnd)
-  );
+  // Check swell conditions
+  const swellMatches =
+    isInRange(conditionsForAnHour.swellHeight, swell.min, swell.max) &&
+    isInRange(conditionsForAnHour.swellPeriod, swell.periodMin, swell.periodMax) &&
+    isInDirectionalRange(conditionsForAnHour.swellDirection, swell.directionStart, swell.directionEnd);
+  if (!swellMatches) return false;
+
+  return true;
 }
 
 
-
-/**
- * finds the matching forecasts for the user's sessions.
- */
-
+// Finds matches for each session using forecastByLocation and user profile.
 function findMatchingForecastsForUserSessions(sessions, forecastByLocation, userProfile) {
-  const matching = [];
+  return sessions.map((session) => {
+    const forecast = forecastByLocation[session.location] || [];
 
-  for (const session of sessions) {
-    const forecast = forecastByLocation[session.location];
-
-    const validMatches = forecast.filter(hour =>
+    const matches = forecast.filter(hour =>
       isHourInUserAvailability(hour.time, userProfile) &&
       matchSessionToConditions(session, hour)
     );
 
-    if (validMatches.length) {
-      matching.push({ session, matches: validMatches });
-    }
+    return { session, matches };
+  }).filter(result => result.matches.length > 0);
+}
+
+
+
+// Refreshes and stores latest matches for one session.
+function handleRefreshSessionMatches(e) {
+  const index = parseInt(e.parameters.index, 10);
+  const sessions = getUserSessions();
+  const session = sessions[index];
+  const userProfile = getUserProfile();
+
+  if (!session || !userProfile) {
+    return CardService.newActionResponseBuilder()
+      .setNotification(CardService.newNotification().setText("⚠️ Session or profile missing."))
+      .build();
   }
 
-  return matching;
+  const forecast = fetchAllWeatherForecast(session.coordinates.lat, session.coordinates.lon, new Date(), 3);
+  const matches = forecast.filter(hour =>
+    isHourInUserAvailability(hour.time, userProfile) &&
+    matchSessionToConditions(session, hour)
+  );
+
+  saveSessionMetadata(index, {
+    lastChecked: new Date().toISOString(),
+    matches
+  });
+
+  return CardService.newActionResponseBuilder()
+    .setNotification(CardService.newNotification().setText(`🔄 Found ${matches.length} match(es)`))
+    .setNavigation(CardService.newNavigation().updateCard(buildSessionDetailCard({ parameters: { index: index.toString() } })))
+    .build();
 }

@@ -63,3 +63,20 @@ function deleteSessionMetadata(index) {
     props.deleteProperty(getMetadataKey(index));
 }
   
+
+/**
+ * Deletes a session by index and returns to the list.
+ */
+function handleDeleteSession(e) {
+    const index = parseInt(e.parameters.index, 10);
+    const sessions = getUserSessions();
+    sessions.splice(index, 1); // remove the session
+    saveUserSessions(sessions);
+
+    deleteSessionMetadata(index);
+  
+    return CardService.newActionResponseBuilder()
+        .setNotification(CardService.newNotification().setText("🗑 Session deleted"))
+        .setNavigation(CardService.newNavigation().popToRoot().pushCard(buildSessionListCard()))
+        .build();
+}

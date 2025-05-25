@@ -170,6 +170,13 @@ function handleSaveSession(e) {
     sessions.push(newSession);
     saveUserSessions(sessions);
 
+    // save the empty matches metadata for this new session
+    const newIndex = sessions.length - 1;
+    saveSessionMetadata(newIndex, {
+    lastChecked: null,
+    matches: []
+    });
+
     return CardService.newActionResponseBuilder()
         .setNotification(CardService.newNotification().setText("✅ Session saved!"))
         .setNavigation(CardService.newNavigation().popToRoot().pushCard(buildSessionListCard()))
