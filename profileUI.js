@@ -76,13 +76,13 @@ function handleSaveUserProfile(e) {
     const profile = {
         name: input.name.stringInputs.value[0],
         timeWindow: {
-        start: input.start.stringInputs.value[0],
-        end: input.end.stringInputs.value[0]
+            start: input.start.stringInputs.value[0],
+            end: input.end.stringInputs.value[0]
         },
         apiKeys: {
-        tide: input.tide.stringInputs.value[0],
-        wind: input.wind.stringInputs.value[0],
-        swell: input.swell.stringInputs.value[0]
+            tide: input.tide.stringInputs.value[0],
+            wind: input.wind.stringInputs.value[0],
+            swell: input.swell.stringInputs.value[0]
         },
         availableDays: input.availableDays.stringInputs.value
     };

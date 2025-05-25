@@ -15,3 +15,18 @@ function geocodeLocation(query) {
     const loc = json.results[0].geometry;
     return { lat: loc.lat, lon: loc.lng };
 }
+
+
+/**
+ * get an image of the map with a marker at the given latitude and longitude.
+ */
+function buildMapImageUrl(lat, lon) {
+    const apiKey = "YOUR_GOOGLE_MAPS_API_KEY";
+    const center = `${lat},${lon}`;
+    const zoom = 13;
+    const size = "400x300";
+    const marker = `color:red|label:S|${lat},${lon}`;
+    const maptype = "roadmap";
+  
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${center}&zoom=${zoom}&size=${size}&maptype=${maptype}&markers=${marker}&key=${apiKey}`;
+}
