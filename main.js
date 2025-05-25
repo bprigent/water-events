@@ -1,12 +1,20 @@
 /**
  * Entry point: triggered when add-on loads in Google Calendar
  */
-
 function buildAddOn(e) {
-  const userProfile = getUserProfile();
-  const card = userProfile ? buildSessionListCard() : buildWelcomeCard();
+    const userProfile = getUserProfile();
+    const card = userProfile ? buildSessionListCard() : buildWelcomeCard();
 
-  return CardService.newActionResponseBuilder()
-    .setNavigation(CardService.newNavigation().pushCard(card))
-    .build();
+    return CardService.newActionResponseBuilder()
+        .setNavigation(CardService.newNavigation().pushCard(card))
+        .build();
+}
+
+function handleRefresh() {
+    const userProfile = getUserProfile();
+    const card = userProfile ? buildSessionListCard() : buildWelcomeCard();
+
+    return CardService.newActionResponseBuilder()
+        .setNavigation(CardService.newNavigation().updateCard(card))
+        .build();
 }

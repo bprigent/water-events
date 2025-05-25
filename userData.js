@@ -1,8 +1,10 @@
-/**
- * This file manages user profile settings using Google Apps Script's Properties Service.
- * It provides functions to save, retrieve, and manage user preferences and API keys.
- */
+/****************************************************/
+/** USER PROFILE SECTION */
+/****************************************************/
 
+/**
+ * saves profile data in the user properties.
+ */
 function saveUserProfile(profile) {
     // Get access to the user's properties storage
     const props = PropertiesService.getUserProperties();
@@ -10,6 +12,9 @@ function saveUserProfile(profile) {
     props.setProperty("userProfile", JSON.stringify(profile));
 }
 
+/**
+ * get the user profile from the user properties.
+ */
 function getUserProfile() {
     const props = PropertiesService.getUserProperties();
     const raw = props.getProperty("userProfile");
@@ -18,8 +23,7 @@ function getUserProfile() {
 }
   
 /**
- * Creates and saves a sample user profile with default values
- * This is useful for testing or initial setup
+ * testing function to save a sample user profile with default values
  */
 function saveSampleProfile() {
     const profile = {
@@ -41,11 +45,38 @@ function saveSampleProfile() {
 }
   
 /**
- * Logs the current user profile to the Apps Script log
- * Useful for debugging and verification
+ * testing function to log the current user profile to the Apps Script log
  */
 function logUserProfile() {
     const profile = getUserProfile();
     Logger.log(profile);
 }
-  
+
+/****************************************************/
+/** USER SESSION SECTION */
+/****************************************************/
+
+/**
+ * save the user sessions to the user properties.
+ */
+function saveUserSessions(sessions) {
+    const props = PropertiesService.getUserProperties();
+    props.setProperty("userSessions", JSON.stringify(sessions));
+}
+
+/**
+ * get the user sessions from the user properties.
+ */
+function getUserSessions() {
+    const props = PropertiesService.getUserProperties();
+    const raw = props.getProperty("userSessions");
+    return raw ? JSON.parse(raw) : [];
+}
+
+/** 
+ * log the user sessions to the Apps Script log
+ */
+function logUserSessions() {
+    const sessions = getUserSessions();
+    Logger.log(sessions);
+}
