@@ -7,12 +7,14 @@
     "https://www.googleapis.com/auth/script.locale",
     "https://www.googleapis.com/auth/script.external_request",
     "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/script.scriptapp"
+    "https://www.googleapis.com/auth/script.scriptapp",
+    "https://www.googleapis.com/auth/calendar.addons.execute"
+
   ],
   "addOns": {
     "common": {
       "name": "Water Events",
-      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Waves_icon.svg/1024px-Waves_icon.svg.png",
+      "logoUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/Emoji_u1f30a.svg/640px-Emoji_u1f30a.svg.png",
       "useLocaleFromApp": true,
       "homepageTrigger": {
         "runFunction": "buildAddOn"
